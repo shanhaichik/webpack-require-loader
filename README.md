@@ -3,7 +3,7 @@ Require a whole directory of trees in bulk
 
 ## Install
 
-`npm i require-loader --save-dev`
+`npm i required-loader --save-dev`
 
 ## Usage
 Add in your code comment:
@@ -19,12 +19,12 @@ Add in your code comment:
 ```js
 {
 	test: /\.js$/,
-    loader: 'test-bulk?import[]=angular',
+    loader: 'required?import[]=angular',
 }
 
 OR
 
-loaders: ['ng-annotate','babel?optional[]=runtime','require?import[]=angular,import[]=$=jquery,params={ip:0.0.0.0}']
+loaders: ['ng-annotate','babel?optional[]=runtime','required?import[]=angular,import[]=$=jquery,params={ip:0.0.0.0}']
 ```
 
 ### Params
