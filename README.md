@@ -10,9 +10,14 @@ Add in your code comment:
 ```js
 //@require "./modules/**/index.js"
 
+//@require "./modules/**/index.js?import[]=angular,import[]=$=jquery,go={hello:'world'}"
+(If the parameters are set in the webpack.config.js file and in @require, they both will be imported into the included files)
+
 //@require "./**/!(index|config|run)*"
 
 //@require "./**/*"
+
+//@require "./**/*.html"
 ```
 
 ### webpack.config.js
@@ -24,7 +29,7 @@ Add in your code comment:
 
 OR
 
-loaders: ['ng-annotate','babel?optional[]=runtime','required?import[]=angular,import[]=$=jquery,params={ip:0.0.0.0}']
+loaders: ["ng-annotate","babel?optional[]=runtime","required?import[]=angular,import[]=$=jquery,params={ip:'0.0.0.0'}"]
 ```
 
 ### Params
@@ -32,9 +37,8 @@ loaders: ['ng-annotate','babel?optional[]=runtime','required?import[]=angular,im
 Param | Description
 ------------|-------
 `import` | `import modules in required scripts`
-`params` | `import params in required scripts. params = var papams = {ip:0.0.0.0}`
+`params` | `import params in required scripts. params = var papams = {hello:'0.0.0.0'}`
 
-Glob (https://github.com/isaacs/node-glob/blob/master/README.md)
 The following characters have special magic meaning when used in a
 path portion:
 

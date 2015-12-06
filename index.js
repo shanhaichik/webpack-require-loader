@@ -2,6 +2,17 @@ var loaderUtils = require("loader-utils");
 var path = require("path");
 var glob = require('glob');
 
+function has (obj, key) {
+    return obj != null && Object.prototype.hasOwnProperty.call(obj, key);
+}
+
+function extend(o) {
+    for (var i = 1, a = arguments, len = a.length; i < len; i++) {
+        for (var prop in a[i]) if (has(a[i], prop)) o[prop] = a[i][prop]
+    }
+    return o;
+}
+
 module.exports = function (source, map) {
     this.cacheable && this.cacheable();
 
@@ -13,27 +24,53 @@ module.exports = function (source, map) {
     var requirePaths = [];
 
     while ((url = reg.exec(source)) !== null) {
-        var sourceParh = url[3];
+        var sourcePath, sourceQuery = null;
 
-        if(sourceParh[sourceParh.length-1] === '*') {
-            sourceParh += '.*';
+        if(!!~url[3].indexOf('?')) {
+            var _url = url[3].split('?');
+            sourcePath  = _url[0],
+            sourceQuery = loaderUtils.parseQuery('?'+_url[1]);
+        }
+        else {
+            sourcePath = url[3];
         }
 
-        var files = glob.sync(sourceParh, { cwd: context });
+        if(sourcePath[sourcePath.length-1] === '*') {
+            sourcePath += '.*';
+        }
 
-        this.addContextDependency(path.dirname(url[3]));
+        var files = glob.sync(sourcePath, { cwd: context });
+
+        this.addContextDependency(path.dirname(sourcePath));
 
         files.forEach(function(file) {
             var _file = path.join(context, file);
             var importString = '';
+            var _import = [];
 
-            if(params.hasOwnProperty('params')) {
-                importString = 'params=>'+params.params+',';
+            if(has(params,'params')) {
+                importString += 'params=>'+params.params+',';
             }
 
-            if(params.import && Array.isArray(params.import)) {
-                importString += params.import.join(',');
+            if(has(params,'import') && Array.isArray(params.import)) {
+                _import = _import.concat(params.import);
+            }
 
+            if(sourceQuery && Object.keys(sourceQuery).length) {
+                for(var key in sourceQuery) {
+                    if(has(sourceQuery, key) && key !== 'import') {
+                        importString += key+'=>'+sourceQuery[key]+',';
+                    }
+                    else if(has(sourceQuery, key) && key === 'import'){
+                        _import = _import.concat(sourceQuery[key]).filter(function(item, pos, self){
+                            return self.indexOf(item) == pos;
+                        });
+                    }
+                }
+            }
+
+            if(_import.length) {
+                importString += _import.join(',');
                 content += '\n require("imports?'+importString+'!'+_file+'"); \n';
             }
             else{
