@@ -6,13 +6,6 @@ function has (obj, key) {
     return obj != null && Object.prototype.hasOwnProperty.call(obj, key);
 }
 
-function extend(o) {
-    for (var i = 1, a = arguments, len = a.length; i < len; i++) {
-        for (var prop in a[i]) if (has(a[i], prop)) o[prop] = a[i][prop]
-    }
-    return o;
-}
-
 module.exports = function (source, map) {
     this.cacheable && this.cacheable();
 
