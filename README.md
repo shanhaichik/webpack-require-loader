@@ -5,7 +5,7 @@ Require a whole directory of trees in bulk
 
 `npm i required-loader --save-dev`
 
-## Usage
+## Usage in JS
 Add in your code comment:
 ```js
 //@require "./modules/**/index.js"
@@ -20,7 +20,13 @@ Add in your code comment:
 //@require "./**/*.html"
 ```
 
+## Usage in CSS/SCSS/STYL
+```js
+	@require "./**/!(app|bootstrap).css";
+```
+
 ### webpack.config.js
+## JS
 ```js
 {
 	test: /\.js$/,
@@ -30,6 +36,18 @@ Add in your code comment:
 OR
 
 loaders: ["ng-annotate","babel?optional[]=runtime","required?import[]=angular,import[]=$=jquery,params={ip:'0.0.0.0'}"]
+```
+
+## CSS
+```js
+{
+	test: /\.css$/,
+    loader: 'required',
+}
+
+OR
+
+loader: ExtractTextPlugin.extract("style-loader","css-loader?sourceMap!postcss-loader!required")
 ```
 
 ### Params

@@ -13,10 +13,17 @@ module.exports = function (source, map) {
     var context = this.context;
     var content = source;
 
-    var reg = /(\/\/@require\s("(.*)"))/mg;
+    var regJS = /(\/\/@require\s("(.*)"))/mg;
+    var regCSS = /(@require\s("(.*)";))/mg;
+    var regCSSImport = /(@import\s("(.*)";))/mg;
+    var extPrecedence = ['.scss', '.sass', '.css','.styl'];
     var requirePaths = [];
 
-    while ((url = reg.exec(source)) !== null) {
+    while ((importUrl = regCSSImport.exec(source)) !== null) {
+        content = content.replace(importUrl[0],'@import "'+path.join(context, importUrl[3])+'";');
+    }
+
+    while ((url = regJS.exec(source)) !== null || (url = regCSS.exec(source)) !== null) {
         var sourcePath, sourceQuery = null;
 
         if(!!~url[3].indexOf('?')) {
@@ -62,14 +69,24 @@ module.exports = function (source, map) {
                 }
             }
 
-            if(_import.length) {
-                importString += _import.join(',');
-                content += '\n require("imports?'+importString+'!'+_file+'"); \n';
+            if(!!~extPrecedence.indexOf(path.extname(_file))){
+                content += '\n @import "'+_file+'";\n';
             }
             else{
-                content += '\n require(_file'+importString.length ? importString : {}+'); \n';
+                if(_import.length) {
+                    importString += _import.join(',');
+                    content += '\n require("imports?'+importString+'!'+_file+'"); \n';
+                }
+                else{
+                    content += '\n require('+_file+''+importString.length ? importString : {}+'); \n';
+                }
             }
         });
+
+
     }
+    content = content.replace(regCSS,'');
+    content = content.replace(regJS,'');
+
     this.callback(null, content, map);
 }
