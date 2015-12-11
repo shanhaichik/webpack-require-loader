@@ -11,7 +11,8 @@ Add in your code comment:
 //@require "./modules/**/index.js"
 
 //@require "./modules/**/index.js?import[]=angular,import[]=$=jquery,go={hello:'world'}"
-(If the parameters are set in the webpack.config.js file and in @require, they both will be imported into the included files)
+If the parameters are set in the webpack.config.js file and in @require, 
+they both will be imported into the included files
 
 //@require "./**/!(index|config|run)*"
 
@@ -19,6 +20,7 @@ Add in your code comment:
 
 //@require "./**/*.html"
 ```
+
 
 ## Usage in CSS/SCSS/STYL
 ```js
