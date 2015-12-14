@@ -6,6 +6,10 @@ function has (obj, key) {
     return obj != null && Object.prototype.hasOwnProperty.call(obj, key);
 }
 
+/**
+ * @param  {string} source
+ * @return {string}
+ */
 module.exports = function (source, map) {
     this.cacheable && this.cacheable();
 
@@ -13,11 +17,11 @@ module.exports = function (source, map) {
     var context = this.context;
     var content = source;
 
-    var regJS = /(\/\/@require\s("(.*)"))/mg;
-    var regCSS = /(@require\s("(.*)";))/mg;
-    var regCSSImport = /(@import\s("(.*)";))/mg;
+    var regJS         = /(\/\/@require\s("(.*)"))/mg;
+    var regCSS        = /(@require\s("(.*)";))/mg;
+    var regCSSImport  = /(@import\s("(.*)";))/mg;
     var extPrecedence = ['.scss', '.sass', '.css','.styl'];
-    var requirePaths = [];
+    var requirePaths  = [];
 
     while ((importUrl = regCSSImport.exec(source)) !== null) {
         content = content.replace(importUrl[0],'@import "'+path.join(context, importUrl[3])+'";');
@@ -41,12 +45,12 @@ module.exports = function (source, map) {
 
         var files = glob.sync(sourcePath, { cwd: context });
 
-        this.addContextDependency(path.dirname(sourcePath));
-
         files.forEach(function(file) {
             var _file = path.join(context, file);
             var importString = '';
             var _import = [];
+
+            this.addDependency(file);
 
             if(has(params,'params')) {
                 importString += 'params=>'+params.params+',';
@@ -81,9 +85,7 @@ module.exports = function (source, map) {
                     content += '\n require('+_file+''+importString.length ? importString : {}+'); \n';
                 }
             }
-        });
-
-
+        }, this);
     }
     content = content.replace(regCSS,'');
     content = content.replace(regJS,'');

@@ -19,12 +19,14 @@
     "url": "git+https://github.com/shanhaichik/webpack-require-loader.git"
   },
   "scripts": {},
-  "version": "0.1.6",
+  "version": "0.1.8",
   "keywords": [
     "webpack",
     "require",
     "webpack-require",
-    "requore-loader",
-    "bulk-require"
+    "require-loader",
+    "bulk-require",
+    "css-loader",
+    "css-require"
   ]
 }
