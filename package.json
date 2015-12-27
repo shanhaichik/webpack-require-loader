@@ -9,7 +9,7 @@
   "dependencies": {
     "loader-utils": "0.2.x",
     "imports-loader": "^0.6.5",
-    "glob": "^6.0.2",
+    "glob": "^6.0.2"
   },
   "description": "Require a whole directory of trees in bulk",
   "homepage": "https://github.com/shanhaichik/webpack-require-loader#readme",
@@ -20,7 +20,7 @@
     "url": "git+https://github.com/shanhaichik/webpack-require-loader.git"
   },
   "scripts": {},
-  "version": "0.1.8",
+  "version": "0.1.9",
   "keywords": [
     "webpack",
     "require",
