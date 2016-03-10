@@ -26,7 +26,7 @@ Add in your code comment:
 ```js
 //@require "./modules/**/index.js?import[]=angular,go={hello:'world'}"
 ```
-* If the import parameters are set in the webpack.config.js file and in @require,
+* If the import parameters are set in the webpack.config.js file and in @require comment,
 they both will be imported into the included files
 
 ## More examples
