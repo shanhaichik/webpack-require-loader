@@ -21,7 +21,7 @@ require('./modules/three/index.js');
 
 ```
 
-## Usage with inport props
+## Usage with import props
 Add in your code comment:
 ```js
 //@require "./modules/**/index.js?import[]=angular,go={hello:'world'}"
@@ -41,8 +41,14 @@ they both will be imported into the included files
 ```
 
 ## Usage in CSS/SCSS/STYL files
-```js
+```css
+/* input string in style file */
 @require "./**/!(app|bootstrap).css";
+
+/* output */
+@import 'style/header.css';
+@import 'style/layout.css';
+@import 'style/menus.css';
 ```
 
 ### webpack.config.js
