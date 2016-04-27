@@ -1,6 +1,7 @@
 var loaderUtils = require("loader-utils");
 var path = require("path");
 var glob = require('glob');
+var slash = require('slash')
 
 function has (obj, key) {
     return obj != null && Object.prototype.hasOwnProperty.call(obj, key);
@@ -72,6 +73,8 @@ module.exports = function (source, map) {
                     }
                 }
             }
+
+            _file = slash(_file);
 
             if(!!~extPrecedence.indexOf(path.extname(_file))){
                 content += '\n @import "'+_file+'";\n';
