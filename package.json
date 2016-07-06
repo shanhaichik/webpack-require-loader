@@ -12,6 +12,9 @@
     "glob": "^6.0.2",
     "slash": "^1.0.0"
   },
+  "files": [
+    "index.js"
+  ],
   "description": "Require a whole directory of trees in bulk",
   "homepage": "https://github.com/shanhaichik/webpack-require-loader#readme",
   "installable": true,
@@ -23,12 +26,11 @@
   "version": "1.0.0",
   "keywords": [
     "webpack",
-    "require loader",
+    "required-loader",
     "webpack-require",
     "require-loader",
     "bulk-require",
-    "css loader",
-    "css require",
+    "loader",
     "loader",
     "require"
   ]
