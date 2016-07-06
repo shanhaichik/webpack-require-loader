@@ -23,7 +23,7 @@
     "type": "git",
     "url": "git+https://github.com/shanhaichik/webpack-require-loader.git"
   },
-  "version": "1.0.0",
+  "version": "1.0.1",
   "keywords": [
     "webpack",
     "required-loader",
