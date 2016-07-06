@@ -24,6 +24,7 @@ cssLoader = {
 ```
 
 ## Use in App
+```
 .
 +-- components
 |   +-- module-1
@@ -40,7 +41,7 @@ cssLoader = {
 +-- config.js
 +-- run.js
 +-- app.js
-
+```
 
 **App.js**
 ```javascript
