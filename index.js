@@ -1,97 +1,107 @@
 var loaderUtils = require("loader-utils");
 var path = require("path");
 var glob = require('glob');
-var slash = require('slash')
-
-function has (obj, key) {
-    return obj != null && Object.prototype.hasOwnProperty.call(obj, key);
-}
+var slash = require('slash');
 
 /**
  * @param  {string} source
  * @return {string}
  */
-module.exports = function (source, map) {
-    this.cacheable && this.cacheable();
+module.exports = function(source, map) {
+  this.cacheable && this.cacheable();
 
-    var params  = loaderUtils.parseQuery(this.query);
-    var context = this.context;
-    var content = source;
+  var query = loaderUtils.parseQuery(this.query);
+  var context = this.context;
+  var content = source;
 
-    var regJS         = /(\/\/@require\s("(.*)"))/mg;
-    var regCSS        = /(@require\s("(.*)";))/mg;
-    var regCSSImport  = /(@import\s("(.*)";))/mg;
-    var extPrecedence = ['.scss', '.sass', '.css','.styl'];
-    var requirePaths  = [];
+  var regJS = /(\s*\/\/\s*@require\s+("(.*)").*)/mg;
+  var regCSS = /(\s*@require\s+("(.*)";).*)/mg;
+  var regCSSImport = /(\s*@import\s+("(.*)";).*)/mg;
+  var cssExtensions = ['.scss', '.sass', '.css', '.styl'];
 
-    while ((importUrl = regCSSImport.exec(source)) !== null) {
-        content = content.replace(importUrl[0],'@import "'+path.join(context, importUrl[3])+'";');
+  while ((importUrl = regCSSImport.exec(source)) !== null) {
+    content = content.replace(importUrl[0], '@import "' + path.join(context, importUrl[3]) + '";');
+  }
+
+  while ((url = regJS.exec(source)) !== null || (url = regCSS.exec(source)) !== null) {
+    var patternAndQuery = getPatternAndQuery(url);
+    var importsString = getImportsString(query, patternAndQuery.query);
+
+    // Find all the files matching the pattern.
+    var files = glob.sync(patternAndQuery.pattern, {
+      cwd: context
+    });
+
+    var self = this;
+    var contentToInject = "";
+    files.forEach(function(file) {
+      self.addDependency(file);
+
+      var filePath = slash(path.join(context, file));
+
+      if (cssExtensions.indexOf(path.extname(filePath)) !== -1) {
+        contentToInject += '\n@import "' + filePath + '";\n';
+      } else {
+        contentToInject += '\nrequire("' + importsString + filePath + '");\n';
+      }
+    });
+
+    var end = url.index + url[0].length;
+    content = content.slice(0, url.index) + contentToInject + content.slice(end);
+  }
+
+  this.callback(null, content, map);
+};
+
+function getPatternAndQuery(url) {
+  var pattern;
+  var query;
+
+  // Get the pattern and the query object.
+  if (url[3].indexOf('?') !== -1) {
+    var _url = url[3].split('?');
+    pattern = _url[0],
+    query = loaderUtils.parseQuery('?' + _url[1]);
+  } else {
+    pattern = url[3];
+    query = {};
+  }
+
+  if (pattern[pattern.length - 1] === '*') {
+    pattern += '.*';
+  }
+
+  return {
+    pattern: pattern,
+    query: query
+  };
+}
+
+function getImportsString(query, sourceQuery) {
+  var imports = [];
+  imports = imports.concat(getImportsFromQuery(query));
+  imports = imports.concat(getImportsFromQuery(sourceQuery));
+
+  var importsString = "";
+  if (imports.length) {
+    importsString = "imports?" + imports.join(',') + "!";
+  }
+
+  return importsString;
+}
+
+function getImportsFromQuery(query) {
+  var imports = [];
+
+  Object.keys(query).forEach(function(key) {
+    if (key !== "import") {
+      return imports.push(key + "=>" + query[key]);
     }
 
-    while ((url = regJS.exec(source)) !== null || (url = regCSS.exec(source)) !== null) {
-        var sourcePath, sourceQuery = null;
-
-        if(!!~url[3].indexOf('?')) {
-            var _url = url[3].split('?');
-            sourcePath  = _url[0],
-            sourceQuery = loaderUtils.parseQuery('?'+_url[1]);
-        }
-        else {
-            sourcePath = url[3];
-        }
-
-        if(sourcePath[sourcePath.length-1] === '*') {
-            sourcePath += '.*';
-        }
-
-        var files = glob.sync(sourcePath, { cwd: context });
-
-        files.forEach(function(file) {
-            var _file = path.join(context, file);
-            var importString = '';
-            var _import = [];
-
-            this.addDependency(file);
-
-            if(has(params,'params')) {
-                importString += 'params=>'+params.params+',';
-            }
-
-            if(has(params,'import') && Array.isArray(params.import)) {
-                _import = _import.concat(params.import);
-            }
-
-            if(sourceQuery && Object.keys(sourceQuery).length) {
-                for(var key in sourceQuery) {
-                    if(has(sourceQuery, key) && key !== 'import') {
-                        importString += key+'=>'+sourceQuery[key]+',';
-                    }
-                    else if(has(sourceQuery, key) && key === 'import'){
-                        _import = _import.concat(sourceQuery[key]).filter(function(item, pos, self){
-                            return self.indexOf(item) == pos;
-                        });
-                    }
-                }
-            }
-
-            _file = slash(_file);
-
-            if(!!~extPrecedence.indexOf(path.extname(_file))){
-                content += '\n @import "'+_file+'";\n';
-            }
-            else{
-                if(_import.length) {
-                    importString += _import.join(',');
-                    content += '\n require("imports?'+importString+'!'+_file+'"); \n';
-                }
-                else{
-                    content += '\n require('+_file+''+importString.length ? importString : {}+'); \n';
-                }
-            }
-        }, this);
+    if (Array.isArray(query.import)) {
+      imports = imports.concat(query.import);
     }
-    content = content.replace(regCSS,'');
-    content = content.replace(regJS,'');
+  });
 
-    this.callback(null, content, map);
+  return imports;
 }
