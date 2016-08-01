@@ -48,7 +48,7 @@ module.exports = function(source, map) {
   }
 
   content = content.replace(regCSS, contentToInject);
-  content = content.replace(regCSS, contentToInject);
+  content = content.replace(regJS, contentToInject);
 
   this.callback(null, content, map);
 };
