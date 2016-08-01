@@ -95,7 +95,6 @@ function getImportsFromQuery(query) {
 
   Object.keys(query).forEach(function(key) {
     if (key !== "import") {
-      console.log("Found a non-import", key, query[key]);
       return imports.push(key + "=>" + query[key]);
     }
 
