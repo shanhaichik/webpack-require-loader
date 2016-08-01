@@ -1,7 +1,7 @@
 var loaderUtils = require("loader-utils");
 var path = require("path");
 var glob = require('glob');
-var slash = require('slash')
+var slash = require('slash');
 
 /**
  * @param  {string} source
@@ -44,8 +44,6 @@ module.exports = function(source, map) {
       } else {
         contentToInject += '\nrequire("' + importsString + filePath + '");\n';
       }
-
-      console.log(contentToInject);
     });
 
     var end = url.index + url[0].length;
@@ -53,7 +51,7 @@ module.exports = function(source, map) {
   }
 
   this.callback(null, content, map);
-}
+};
 
 function getPatternAndQuery(url) {
   var pattern;
@@ -98,7 +96,7 @@ function getImportsFromQuery(query) {
   Object.keys(query).forEach(function(key) {
     if (key !== "import") {
       console.log("Found a non-import", key, query[key]);
-      return imports.push(key + "=>" + query[key])
+      return imports.push(key + "=>" + query[key]);
     }
 
     if (Array.isArray(query.import)) {
