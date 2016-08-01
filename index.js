@@ -18,6 +18,7 @@ module.exports = function(source, map) {
   var regCSS = /(\s*@require\s+("(.*)";).*)/mg;
   var regCSSImport = /(\s*@import\s+("(.*)";).*)/mg;
   var cssExtensions = ['.scss', '.sass', '.css', '.styl'];
+  var contentToInject = "";
 
   while ((importUrl = regCSSImport.exec(source)) !== null) {
     content = content.replace(importUrl[0], '@import "' + path.join(context, importUrl[3]) + '";');
@@ -33,7 +34,6 @@ module.exports = function(source, map) {
     });
 
     var self = this;
-    var contentToInject = "";
     files.forEach(function(file) {
       self.addDependency(file);
 
@@ -42,13 +42,13 @@ module.exports = function(source, map) {
       if (cssExtensions.indexOf(path.extname(filePath)) !== -1) {
         contentToInject += '\n@import "' + filePath + '";\n';
       } else {
-        contentToInject += '\nrequire("' + importsString + filePath + '");\n';
+        contentToInject += '\nrequire("'+ importsString + filePath +'");\n';
       }
     });
-
-    var end = url.index + url[0].length;
-    content = content.slice(0, url.index) + contentToInject + content.slice(end);
   }
+
+  content = content.replace(regCSS, contentToInject);
+  content = content.replace(regCSS, contentToInject);
 
   this.callback(null, content, map);
 };
@@ -60,7 +60,7 @@ function getPatternAndQuery(url) {
   // Get the pattern and the query object.
   if (url[3].indexOf('?') !== -1) {
     var _url = url[3].split('?');
-    pattern = _url[0],
+    pattern = _url[0];
     query = loaderUtils.parseQuery('?' + _url[1]);
   } else {
     pattern = url[3];
