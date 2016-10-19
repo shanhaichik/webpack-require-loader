@@ -1,4 +1,5 @@
 var loaderUtils = require("loader-utils");
+var fs = require('fs');
 var path = require("path");
 var glob = require('glob');
 var slash = require('slash');
@@ -21,7 +22,11 @@ module.exports = function(source, map) {
   var contentToInject = "";
 
   while ((importUrl = regCSSImport.exec(source)) !== null) {
-    content = content.replace(importUrl[0], '@import "' + path.join(context, importUrl[3]) + '";');
+    var importPath = path.join(context, importUrl[3]);
+    if(!fs.existsSync(importPath)) {
+      importPath = importUrl[3];
+    }
+    content = content.replace(importUrl[0], '@import "' + importPath + '";');
   }
 
   while ((url = regJS.exec(source)) !== null || (url = regCSS.exec(source)) !== null) {
