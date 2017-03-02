@@ -15,9 +15,9 @@ module.exports = function(source, map) {
   var context = this.context;
   var content = source;
 
-  var regJS = /(\s*\/\/\s*@require\s+(["'](.*)["']).*)/mg;
-  var regCSS = /(\s*@require\s+(["'](.*)["'];).*)/mg;
-  var regCSSImport = /(\s*@import\s+(["'](.*)["'];).*)/mg;
+  var regJS = /\s*\/\/\s*@(require|require-loader)*\s+(["'](.*)["']).*/mg;
+  var regCSS = /\s*@(require|require-loader)*\s+(["'](.*)["']).*/mg;
+  var regCSSImport = /\s*@(import|import-loader)*\s+(["'](.*)["']).*/mg;
   var cssExtensions = ['.scss', '.sass', '.css', '.styl'];
   var contentToInject = "";
 
