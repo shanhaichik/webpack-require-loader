@@ -5,6 +5,8 @@ It can be used to import any kind of files. You can use it in javascript files o
 
 [Use with angular](https://github.com/shanhaichik/webpack-require-loader/blob/master/ANGULAR.md)
 
+## Support Webpack 1.x and Webpack 2.x
+
 ## Install
 
 `npm i required-loader --save-dev`
@@ -103,3 +105,4 @@ patterns provided.
 provided
 
 ## If you find a mistake, don't be lazy, write. Thank you.
+## Pull request welcome
