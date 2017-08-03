@@ -18,7 +18,7 @@ module.exports = function(source, map) {
   var regJS = /\s*\/\/\s*@(require|require-loader)*\s+(["'](.*)["']).*/mg;
   var regCSS = /\s*@(require|require-loader)*\s+(["'](.*)["']).*/mg;
   var regCSSImport = /\s*@(import|import-loader)*\s+(["'](.*)["']).*/mg;
-  var cssExtensions = ['.scss', '.sass', '.css', '.styl'];
+  var cssExtensions = ['.scss', '.sass', '.css', '.styl', '.less'];
   var contentToInject = "";
 
   while ((importUrl = regCSSImport.exec(source)) !== null) {
