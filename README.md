@@ -43,7 +43,7 @@ they both will be imported into the included files
 //@require "./**/*.html"
 ```
 
-## Usage in CSS/SCSS/STYL files
+## Usage in CSS/SCSS/STYL/LESS files
 ```css
 /* input string in style file */
 @require "./**/!(app|bootstrap).css";
