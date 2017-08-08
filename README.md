@@ -4,7 +4,7 @@ Loader receives a file tree from a template and import them with the necessary p
 It can be used to import any kind of files. You can use it in javascript files or style files. Works great with ng-include and ng-cache when developing angular applications.
 
 [Use with angular](https://github.com/shanhaichik/webpack-require-loader/blob/master/ANGULAR.md)
-
+[Help author](http://yasobe.ru/na/for_family)
 ## Support Webpack 1.x and Webpack 2.x
 
 ## Install
@@ -47,7 +47,9 @@ they both will be imported into the included files
 ```css
 /* input string in style file */
 @require "./**/!(app|bootstrap).css";
-
+@require "./**/*.less";
+@require "./**/*.scss";
+@require "./**/*.styl";
 /* output */
 @import 'style/header.css';
 @import 'style/layout.css';
