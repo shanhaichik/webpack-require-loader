@@ -6,7 +6,7 @@
   "bugs": {
     "url": "https://github.com/shanhaichik/webpack-require-loader/issues"
   },
-  "dependencies": {
+  "devDependencies": {
     "loader-utils": "0.2.x",
     "imports-loader": "^0.6.5",
     "glob": "^6.0.2",
@@ -23,7 +23,7 @@
     "type": "git",
     "url": "git+https://github.com/shanhaichik/webpack-require-loader.git"
   },
-  "version": "1.3.12",
+  "version": "1.3.13",
   "keywords": [
     "webpack",
     "required-loader",
