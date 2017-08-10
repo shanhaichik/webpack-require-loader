@@ -89,7 +89,7 @@ function getImportsString(query, sourceQuery) {
 
   var importsString = "";
   if (imports.length) {
-    importsString = "imports?" + imports.join(',') + "!";
+    importsString = "imports-loader?" + imports.join(',') + "!";
   }
 
   return importsString;
