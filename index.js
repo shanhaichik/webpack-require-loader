@@ -11,7 +11,7 @@ var slash = require('slash');
 module.exports = function(source, map) {
   this.cacheable && this.cacheable();
 
-  var query = loaderUtils.parseQuery(this.query);
+  var query = loaderUtils.getOptions(this) || {};
   var context = this.context;
   var content = source;
 
