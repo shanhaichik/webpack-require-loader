@@ -5,7 +5,7 @@ It can be used to import any kind of files. You can use it in javascript files o
 
 [Use with angular](https://github.com/shanhaichik/webpack-require-loader/blob/master/ANGULAR.md)
 
-[Help author (donate)](http://yasobe.ru/na/for_family)
+[Help author (donate)](https://www.paypal.me/shanhaichik)
 ## Support Webpack 1.x and Webpack 2.x
 
 ## Install
